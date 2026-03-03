@@ -3,6 +3,7 @@ package com.jbucket.view;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,6 +22,9 @@ public class JBucketApplication extends Application {
         stage.requestFocus();
         stage.toFront();
         stage.centerOnScreen();
+        stage.getIcons().add(
+                new Image(JBucketApplication.class.getResourceAsStream("/com/jbucket/view/icon.png"))
+        );
         stage.show();
     }
 }
