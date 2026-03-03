@@ -1,10 +1,9 @@
-package com.mybucket4j.controller;
+package com.jbucket.controller;
 
-import com.mybucket4j.model.BucketObject;
-import com.mybucket4j.model.exception.InvalidCredentialsException;
-import com.mybucket4j.model.service.BucketService;
-import com.mybucket4j.model.BucketSession;
-import com.mybucket4j.view.MyBucket4jApplication;
+import com.jbucket.model.BucketObject;
+import com.jbucket.model.BucketSession;
+import com.jbucket.model.service.BucketService;
+import com.jbucket.view.JBucketApplication;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,7 +17,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +25,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class MyBucket4jController {
+public class JBucketController {
     private BucketService bucketService;
 
     @FXML
@@ -72,7 +70,7 @@ public class MyBucket4jController {
     private final ObservableList<BucketObject> tableItems = FXCollections.observableArrayList();
 
 
-    public MyBucket4jController(BucketService bucketService) {
+    public JBucketController(BucketService bucketService) {
         this.bucketService = bucketService;
     }
 
@@ -252,7 +250,7 @@ public class MyBucket4jController {
 
         Stage currentStage = (Stage) resultTableView.getScene().getWindow();
 
-        FXMLLoader loader = new FXMLLoader(MyBucket4jApplication.class.getResource("login.fxml"));
+        FXMLLoader loader = new FXMLLoader(JBucketApplication.class.getResource("login.fxml"));
         Scene scene = new Scene(loader.load());
 
         currentStage.hide();

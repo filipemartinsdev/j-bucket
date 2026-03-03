@@ -1,4 +1,4 @@
-package com.mybucket4j.model;
+package com.jbucket.model;
 
 import java.time.Instant;
 

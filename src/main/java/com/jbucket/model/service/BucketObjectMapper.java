@@ -1,6 +1,6 @@
-package com.mybucket4j.model.service;
+package com.jbucket.model.service;
 
-import com.mybucket4j.model.BucketObject;
+import com.jbucket.model.BucketObject;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
 public class BucketObjectMapper {

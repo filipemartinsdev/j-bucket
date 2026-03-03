@@ -1,14 +1,16 @@
-package com.mybucket4j.model.service;
+package com.jbucket.model.service;
 
-import com.mybucket4j.model.BucketObject;
-import com.mybucket4j.model.BucketSession;
-import com.mybucket4j.model.exception.InvalidCredentialsException;
-import javafx.concurrent.Task;
+import com.jbucket.model.BucketObject;
+import com.jbucket.model.BucketSession;
+import com.jbucket.model.exception.InvalidCredentialsException;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.*;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.io.File;
 import java.util.List;

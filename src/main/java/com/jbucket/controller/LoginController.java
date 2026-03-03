@@ -1,9 +1,8 @@
-package com.mybucket4j.controller;
+package com.jbucket.controller;
 
-import com.mybucket4j.model.service.BucketService;
-import com.mybucket4j.model.BucketSession;
-import com.mybucket4j.model.exception.InvalidCredentialsException;
-import com.mybucket4j.view.MyBucket4jApplication;
+import com.jbucket.model.BucketSession;
+import com.jbucket.model.exception.InvalidCredentialsException;
+import com.jbucket.model.service.BucketService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -102,8 +101,8 @@ public class LoginController {
             return;
         }
 
-        FXMLLoader fxmlLoader = new FXMLLoader(MyBucket4jApplication.class.getResource("index.fxml"));
-        fxmlLoader.setController(new MyBucket4jController(bucketService));
+        FXMLLoader fxmlLoader = new FXMLLoader(JBucketController.class.getResource("index.fxml"));
+        fxmlLoader.setController(new JBucketController(bucketService));
 
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) confirmBtn.getScene().getWindow();
