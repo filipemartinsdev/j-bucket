@@ -3,6 +3,7 @@ package com.jbucket.controller;
 import com.jbucket.model.BucketSession;
 import com.jbucket.model.exception.InvalidCredentialsException;
 import com.jbucket.model.service.BucketService;
+import com.jbucket.view.JBucketApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -92,7 +93,6 @@ public class LoginController {
 
         BucketSession session = new BucketSession(bucketName, accessKey, secretKey, region);
 
-
         BucketService bucketService = null;
         try {
             bucketService = new BucketService(session);
@@ -101,7 +101,7 @@ public class LoginController {
             return;
         }
 
-        FXMLLoader fxmlLoader = new FXMLLoader(JBucketController.class.getResource("index.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(JBucketApplication.class.getResource("index.fxml"));
         fxmlLoader.setController(new JBucketController(bucketService));
 
         Scene scene = new Scene(fxmlLoader.load());

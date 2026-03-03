@@ -93,7 +93,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
-      <TableView fx:id="resultTableView" prefHeight="391.0" prefWidth="844.0" VBox.vgrow="ALWAYS">
+      <TableView fx:id="resultTableView" prefHeight="391.0" prefWidth="973.0" VBox.vgrow="ALWAYS">
         <columns>
           <TableColumn fx:id="nameColumn" minWidth="50.0" prefWidth="50.0" text="Name" />
             <TableColumn fx:id="sizeColumn" minWidth="25.0" prefWidth="25.0" text="Size" />
