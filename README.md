@@ -33,8 +33,10 @@ Um client expresso para operar um Bucket na AWS S3, com uma interface minimalist
   - [x] Salvar sessão
 - [x] Gerenciamento de objetos
   - [x] Listagem
-  - [x] Criação
-  - [ ] Deleção
+  - [x] Deleção
+  - [x] Upload
+  - [x] Download
+- [ ] Árvore de diretórios
 
 <img src="images/login-page.png" alt="Logo" width="640pt">
 <img src="images/app.png" alt="Logo" width="640pt">
