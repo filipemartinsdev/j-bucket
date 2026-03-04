@@ -272,6 +272,27 @@ public class JBucketController {
 
     @FXML
     public void delete(ActionEvent event) throws IOException {
-        System.out.println("Delete");
+        var selectedLine = resultTableView.getSelectionModel();
+        String fileName = selectedLine.getSelectedItem().getName();
+
+        System.out.println("Delete: "+fileName);
+
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                bucketService.deleteFile(fileName);
+                return null;
+            }
+        };
+
+        task.setOnFailed(e -> {
+            alertError("Can't delete file");
+        });
+
+        task.setOnSucceeded(e -> {
+            loadObjects();
+        });
+
+        new Thread(task).start();
     }
 }

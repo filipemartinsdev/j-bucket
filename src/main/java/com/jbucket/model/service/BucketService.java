@@ -7,10 +7,7 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.File;
 import java.util.List;
@@ -79,10 +76,20 @@ public class BucketService {
     }
 
     public void downloadFile(String fileName){
-
+//        GetObjectRequest request = GetObjectRequest.builder()
+//                .bucket(bucketSession.bucketName())
+//                .key(fileName)
+//                .build();
+//        GetObjectResponse response = s3Client.getObject(request).response();
     }
 
-    public void deleteFile(String filename){}
+    public void deleteFile(String filename){
+        DeleteObjectRequest request = DeleteObjectRequest.builder()
+                .bucket(bucketSession.bucketName())
+                .key(filename)
+                .build();
+        s3Client.deleteObject(request);
+    }
 
     public void close() {
         this.s3Client.close();
