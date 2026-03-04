@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 public class BucketService {
@@ -75,12 +76,18 @@ public class BucketService {
         }
     }
 
-    public void downloadFile(String fileName){
-//        GetObjectRequest request = GetObjectRequest.builder()
-//                .bucket(bucketSession.bucketName())
-//                .key(fileName)
-//                .build();
-//        GetObjectResponse response = s3Client.getObject(request).response();
+    public void downloadFile(String fileName, Path path) throws RuntimeException{
+        GetObjectRequest request = GetObjectRequest.builder()
+                .bucket(bucketSession.bucketName())
+                .key(fileName)
+                .build();
+        try {
+            GetObjectResponse response = s3Client.getObject(request, path);
+        } catch (NoSuchKeyException noSuchKeyException) {
+            throw new RuntimeException("File not found");
+        } catch (S3Exception s3Exception) {
+            throw new RuntimeException("Connection failed");
+        }
     }
 
     public void deleteFile(String filename){

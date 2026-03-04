@@ -4,6 +4,7 @@ import com.jbucket.model.BucketObject;
 import com.jbucket.model.BucketSession;
 import com.jbucket.model.service.BucketService;
 import com.jbucket.view.JBucketApplication;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,15 +16,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 public class JBucketController {
     private BucketService bucketService;
@@ -76,11 +82,36 @@ public class JBucketController {
 
     @FXML
     public void initialize() {
+        configureExitConfirmation();
         configureBucketLabels();
         configureTable();
 
         resultTableView.setItems(tableItems);
         loadObjects();
+    }
+
+    private void configureExitConfirmation(){
+        Platform.runLater(()->{
+            Stage stage = (Stage) resultTableView.getScene().getWindow();
+
+            stage.setOnCloseRequest(event -> {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation");
+                alert.setHeaderText("Do you really want to exit?");
+                alert.initOwner(stage);
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.isPresent() && result.get() == ButtonType.OK)
+                    closeApp(stage);
+                else event.consume();
+            });
+        });
+    }
+
+    private void closeApp(Stage stage){
+        bucketService.close();
+        stage.close();
     }
 
     private void connectionTest(){
@@ -184,7 +215,6 @@ public class JBucketController {
     @FXML
     public void search(){
         tableItems.clear();
-        System.out.println("Search");
 
         String query = getSearchQuery();
         Task<List<BucketObject>> task = new Task<>() {
@@ -196,9 +226,9 @@ public class JBucketController {
 
         task.setOnSucceeded(event -> {
             tableItems.addAll(task.getValue());
-            task.getValue().forEach(bucketObject -> {
-                System.out.println("name: "+bucketObject.getName());
-            });
+//            task.getValue().forEach(bucketObject -> {
+//                System.out.println("name: "+bucketObject.getName());
+//            });
         });
 
         task.setOnFailed(event -> {
@@ -267,15 +297,76 @@ public class JBucketController {
 
     @FXML
     public void download(ActionEvent event) throws IOException {
-        System.out.println("Download");
+        var selectedLine = resultTableView.getSelectionModel();
+        String fileName = selectedLine.getSelectedItem().getName();
+
+        Path path;
+        try {
+            path = getDownloadPath();
+        } catch (Exception e){
+            return;
+        }
+
+        Path destinationPath = Paths.get(path.toString(), fileName);
+
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                bucketService.downloadFile(fileName, destinationPath);
+                return null;
+            }
+        };
+
+        task.setOnFailed(e -> {
+            alertError(e.getSource().getException().getMessage());
+        });
+
+        task.setOnSucceeded(e -> {
+            loadObjects();
+            alertSuccess("File Downloaded successfully!");
+        });
+
+        if (Files.exists(destinationPath)){
+            if(!askToOverwriteFile())
+                return;
+            else
+                Files.delete(destinationPath);
+        }
+        new Thread(task).start();
+    }
+
+    private Path getDownloadPath() throws Exception {
+        Stage stage = (Stage) resultTableView.getScene().getWindow();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select a directory");
+        File directory = directoryChooser.showDialog(stage);
+
+        if (directory != null) {
+
+            return directory.toPath().toAbsolutePath();
+        }
+        else {
+            throw new Exception("No file selected");
+        }
+    }
+
+    private boolean askToOverwriteFile(){
+        Stage stage = (Stage) resultTableView.getScene().getWindow();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Warning");
+        alert.setHeaderText("This file is already exists");
+        alert.setContentText("Are you sure you want to overwrite this file?");
+        alert.initOwner(stage);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        return result.isPresent() && result.get() == ButtonType.OK;
     }
 
     @FXML
     public void delete(ActionEvent event) throws IOException {
         var selectedLine = resultTableView.getSelectionModel();
         String fileName = selectedLine.getSelectedItem().getName();
-
-        System.out.println("Delete: "+fileName);
 
         Task<Void> task = new Task<Void>() {
             @Override
