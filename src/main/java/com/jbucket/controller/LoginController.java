@@ -108,7 +108,7 @@ public class LoginController {
         Stage stage = (Stage) confirmBtn.getScene().getWindow();
         stage.hide();
         stage.setScene(scene);
-        stage.setTitle("MyBucket4j");
+        stage.setTitle("J-Bucket");
         stage.setWidth(1024);
         stage.setHeight(728);
         stage.setMinWidth(400);

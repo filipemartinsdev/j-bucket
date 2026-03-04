@@ -285,7 +285,7 @@ public class JBucketController {
 
         currentStage.hide();
         currentStage.setScene(scene);
-        currentStage.setTitle("MyBucket4j Login");
+        currentStage.setTitle("J-Bucket Login");
         currentStage.setWidth(400);
         currentStage.setHeight(600);
         currentStage.requestFocus();
